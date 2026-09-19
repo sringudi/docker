@@ -3,864 +3,672 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Instaclone</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <title>Brick Breaker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #fafafa;
-      color: #262626;
-      font-size: 14px;
-    }
-
-    /* ---------- TOP NAV ---------- */
-    .topbar {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      height: 60px;
-      background: #fff;
-      border-bottom: 1px solid #dbdbdb;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .topbar-inner {
-      width: 100%;
-      max-width: 975px;
-      padding: 0 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .logo {
-      font-family: 'Inter', cursive;
-      font-size: 1.6rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      color: #262626;
-      text-decoration: none;
-    }
-
-    .search-box {
-      position: relative;
-      width: 268px;
-    }
-
-    .search-box input {
-      width: 100%;
-      height: 36px;
-      background: #efefef;
-      border: 1px solid transparent;
-      border-radius: 8px;
-      padding: 0 16px 0 40px;
-      font-size: 14px;
-      outline: none;
-      transition: all 0.2s;
-    }
-
-    .search-box input:focus {
-      background: #fff;
-      border-color: #dbdbdb;
-    }
-
-    .search-box i {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #8e8e8e;
-      font-size: 14px;
-    }
-
-    .nav-icons {
-      display: flex;
-      align-items: center;
-      gap: 22px;
-    }
-
-    .nav-icons a {
-      color: #262626;
-      font-size: 1.4rem;
-      text-decoration: none;
-      transition: all 0.2s;
-      position: relative;
-    }
-
-    .nav-icons a:hover { opacity: 0.6; }
-
-    .avatar-nav {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 1px solid #dbdbdb;
-      cursor: pointer;
-    }
-
-    .nav-badge {
-      position: absolute;
-      top: -4px;
-      right: -6px;
-      background: #ed4956;
-      color: #fff;
-      font-size: 10px;
-      font-weight: 700;
-      min-width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 4px;
-      border: 2px solid #fff;
-    }
-
-    /* ---------- LAYOUT ---------- */
-    .main-container {
-      max-width: 975px;
-      margin: 0 auto;
-      padding: 84px 20px 40px;
-      display: grid;
-      grid-template-columns: 1fr 320px;
-      gap: 32px;
-    }
-
-    /* ---------- STORIES ---------- */
-    .stories {
-      background: #fff;
-      border: 1px solid #dbdbdb;
-      border-radius: 8px;
-      padding: 16px 0 16px 16px;
-      margin-bottom: 24px;
-      display: flex;
-      gap: 16px;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-
-    .stories::-webkit-scrollbar { display: none; }
-
-    .story {
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at 50% 30%, #1a1f3a, #0a0c16 70%);
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      min-width: 66px;
-      flex-shrink: 0;
-    }
-
-    .story-ring {
-      width: 62px;
-      height: 62px;
-      border-radius: 50%;
-      padding: 3px;
-      background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-      display: flex;
-      align-items: center;
       justify-content: center;
-      transition: transform 0.2s;
-    }
-
-    .story-ring.seen {
-      background: #dbdbdb;
-    }
-
-    .story:hover .story-ring { transform: scale(1.05); }
-
-    .story-ring img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #fff;
-    }
-
-    .story-name {
-      font-size: 12px;
-      color: #262626;
-      max-width: 66px;
+      color: #fff;
       overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      user-select: none;
+      padding: 16px;
     }
 
-    /* ---------- POSTS ---------- */
-    .feed { max-width: 614px; }
-
-    .post {
-      background: #fff;
-      border: 1px solid #dbdbdb;
-      border-radius: 8px;
-      margin-bottom: 24px;
-      overflow: hidden;
-    }
-
-    .post-header {
+    .game-wrap {
+      position: relative;
       display: flex;
-      align-items: center;
-      padding: 14px 16px;
-      gap: 12px;
-    }
-
-    .post-header img {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .post-header .username {
-      font-weight: 600;
-      font-size: 14px;
-      flex: 1;
-    }
-
-    .post-header .username span {
-      color: #8e8e8e;
-      font-weight: 400;
-      margin-left: 4px;
-      font-size: 12px;
-    }
-
-    .post-header .more-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: #262626;
-      font-size: 1.1rem;
-      padding: 4px;
-    }
-
-    .post-image {
-      width: 100%;
-      aspect-ratio: 1;
-      object-fit: cover;
-      background: #efefef;
-      display: block;
-    }
-
-    .post-actions {
-      padding: 12px 16px 8px;
-      display: flex;
+      flex-direction: column;
       align-items: center;
       gap: 16px;
     }
 
-    .post-actions button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 1.5rem;
-      color: #262626;
-      padding: 0;
-      transition: transform 0.15s;
-    }
-
-    .post-actions button:hover { transform: scale(1.1); }
-    .post-actions button.liked { color: #ed4956; }
-
-    .post-actions .bookmark-btn {
-      margin-left: auto;
-      font-size: 1.4rem;
-    }
-
-    .post-likes {
-      padding: 0 16px 6px;
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .post-caption {
-      padding: 0 16px 8px;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .post-caption .username {
-      font-weight: 600;
-      margin-right: 6px;
-    }
-
-    .post-caption .hashtag {
-      color: #00376b;
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .post-time {
-      padding: 0 16px 12px;
-      font-size: 10px;
-      color: #8e8e8e;
-      text-transform: uppercase;
-      letter-spacing: 0.2px;
-    }
-
-    .post-comments {
-      padding: 0 16px 8px;
-      font-size: 14px;
-      color: #8e8e8e;
-      cursor: pointer;
-    }
-
-    .add-comment {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
-      border-top: 1px solid #efefef;
-    }
-
-    .add-comment input {
-      flex: 1;
-      border: none;
-      outline: none;
-      font-size: 14px;
-      font-family: inherit;
-      background: transparent;
-    }
-
-    .add-comment button {
-      background: none;
-      border: none;
-      color: #0095f6;
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      opacity: 0.4;
-      pointer-events: none;
-      font-family: inherit;
-    }
-
-    .add-comment button.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    /* ---------- SIDEBAR ---------- */
-    .sidebar {
-      position: sticky;
-      top: 84px;
-      height: fit-content;
-    }
-
-    .profile-card {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 8px 0 20px;
-    }
-
-    .profile-card img {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .profile-card .info { flex: 1; }
-    .profile-card .info .name { font-weight: 600; font-size: 14px; }
-    .profile-card .info .handle { color: #8e8e8e; font-size: 14px; }
-
-    .profile-card .switch {
-      color: #0095f6;
-      font-weight: 600;
-      font-size: 12px;
-      text-decoration: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-family: inherit;
-    }
-
-    .suggestions-header {
+    .hud {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px 0 12px;
-    }
-
-    .suggestions-header span:first-child {
-      color: #8e8e8e;
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .suggestions-header span:last-child {
-      color: #262626;
-      font-weight: 600;
-      font-size: 12px;
-      cursor: pointer;
-    }
-
-    .suggestion {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 8px 0;
-    }
-
-    .suggestion img {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .suggestion .info { flex: 1; }
-    .suggestion .info .name { font-weight: 600; font-size: 14px; }
-    .suggestion .info .reason { color: #8e8e8e; font-size: 12px; }
-
-    .suggestion .follow-btn {
-      color: #0095f6;
-      font-weight: 600;
-      font-size: 12px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-family: inherit;
-    }
-
-    .sidebar-footer {
-      margin-top: 24px;
-      font-size: 11px;
-      color: #c7c7c7;
-      line-height: 1.8;
-    }
-
-    .sidebar-footer a {
-      color: #c7c7c7;
-      text-decoration: none;
-      margin-right: 6px;
-    }
-
-    .sidebar-footer a:hover { text-decoration: underline; }
-
-    .copyright {
-      margin-top: 12px;
-      font-size: 11px;
-      color: #c7c7c7;
-    }
-
-    /* ---------- MOBILE BOTTOM NAV ---------- */
-    .mobile-nav {
-      display: none;
-      position: fixed;
-      bottom: 0;
       width: 100%;
-      height: 52px;
-      background: #fff;
-      border-top: 1px solid #dbdbdb;
-      z-index: 100;
-      justify-content: space-around;
-      align-items: center;
+      max-width: 640px;
+      padding: 0 4px;
     }
 
-    .mobile-nav a {
-      color: #262626;
+    .hud-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .hud-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: #6b7ba8;
+      font-weight: 600;
+    }
+
+    .hud-value {
       font-size: 1.4rem;
-      text-decoration: none;
-      padding: 8px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #5e7cff, #b05eff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
     }
 
-    /* ---------- DOUBLE TAP HEART ---------- */
-    .heart-burst {
+    .lives {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      height: 26px;
+    }
+
+    .life {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #ff5e9c;
+      box-shadow: 0 0 12px rgba(255, 94, 156, 0.6);
+      transition: all 0.3s;
+    }
+
+    .life.lost {
+      background: #2a2f45;
+      box-shadow: none;
+    }
+
+    canvas {
+      background: #0d1120;
+      border-radius: 20px;
+      box-shadow: 0 30px 60px -20px rgba(94, 124, 255, 0.4),
+                  0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+      display: block;
+      max-width: 100%;
+      height: auto;
+      cursor: none;
+      touch-action: none;
+    }
+
+    .overlay {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      font-size: 80px;
-      color: #fff;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(10, 12, 22, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 16px;
+      padding: 24px;
+      transition: opacity 0.3s ease;
+      z-index: 10;
+    }
+
+    .overlay.hidden {
       opacity: 0;
       pointer-events: none;
     }
 
-    .heart-burst.animate {
-      animation: heartPop 0.9s ease forwards;
+    .overlay h2 {
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #5e7cff, #b05eff, #ff5e9c);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
     }
 
-    @keyframes heartPop {
-      0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-      15% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.9; }
-      30% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
-      70% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
-      100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0; }
+    .overlay p {
+      color: #9aa8bd;
+      font-size: 0.95rem;
+      max-width: 340px;
+      line-height: 1.6;
     }
 
-    .post-image-wrap {
-      position: relative;
+    .play-btn {
+      background: linear-gradient(135deg, #5e7cff, #b05eff);
+      color: #fff;
+      border: none;
+      padding: 14px 40px;
+      border-radius: 60px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 1rem;
       cursor: pointer;
+      transition: all 0.25s;
+      box-shadow: 0 14px 30px -8px rgba(94, 124, 255, 0.6);
+      letter-spacing: 0.02em;
     }
 
-    /* ---------- RESPONSIVE ---------- */
-    @media (max-width: 900px) {
-      .main-container {
-        grid-template-columns: 1fr;
-        max-width: 614px;
-      }
-      .sidebar { display: none; }
-      .search-box { display: none; }
+    .play-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 40px -10px rgba(94, 124, 255, 0.8);
     }
 
-    @media (max-width: 640px) {
-      .topbar { height: 54px; }
-      .main-container { padding: 68px 0 60px; }
-      .feed { max-width: 100%; }
-      .stories {
-        border-radius: 0;
-        border-left: none;
-        border-right: none;
-        margin-bottom: 0;
-      }
-      .post {
-        border-radius: 0;
-        border-left: none;
-        border-right: none;
-        margin-bottom: 8px;
-      }
-      .mobile-nav { display: flex; }
-      .nav-icons { gap: 18px; }
+    .play-btn:active {
+      transform: translateY(0);
+    }
+
+    .controls-hint {
+      color: #556080;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .controls-hint kbd {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-family: inherit;
+      font-size: 0.75rem;
+      color: #9aa8bd;
+    }
+
+    @media (max-width: 500px) {
+      .hud-value { font-size: 1.1rem; }
+      canvas { border-radius: 14px; }
+      .overlay { border-radius: 14px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- TOP NAV -->
-  <header class="topbar">
-    <div class="topbar-inner">
-      <a href="#" class="logo">Instaclone</a>
-      <div class="search-box">
-        <i class="fas fa-search"></i>
-        <input type="text" placeholder="Search">
+  <div class="game-wrap">
+    <div class="hud">
+      <div class="hud-item">
+        <span class="hud-label">Score</span>
+        <span class="hud-value" id="score">0</span>
       </div>
-      <div class="nav-icons">
-        <a href="#"><i class="far fa-heart"></i><span class="nav-badge">3</span></a>
-        <a href="#"><i class="far fa-paper-plane"></i></a>
-        <a href="#"><i class="far fa-plus-square"></i></a>
-        <img class="avatar-nav" src="https://i.pravatar.cc/150?img=12" alt="Profile">
+      <div class="hud-item" style="align-items: center;">
+        <span class="hud-label">Lives</span>
+        <div class="lives" id="lives"></div>
+      </div>
+      <div class="hud-item" style="align-items: flex-end;">
+        <span class="hud-label">Level</span>
+        <span class="hud-value" id="level">1</span>
       </div>
     </div>
-  </header>
 
-  <!-- MAIN -->
-  <main class="main-container">
-    <div class="feed">
+    <canvas id="game" width="640" height="480"></canvas>
 
-      <!-- STORIES -->
-      <div class="stories" id="stories"></div>
-
-      <!-- POSTS -->
-      <div id="feed"></div>
-
+    <div class="overlay" id="overlay">
+      <h2 id="overlayTitle">Brick Breaker</h2>
+      <p id="overlayText">Move your paddle with the mouse or arrow keys. Break all the bricks to win!</p>
+      <button class="play-btn" id="playBtn">Play Game</button>
+      <div class="controls-hint">
+        <kbd>←</kbd> <kbd>→</kbd> or move mouse
+      </div>
     </div>
-
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-      <div class="profile-card">
-        <img src="https://i.pravatar.cc/150?img=12" alt="You">
-        <div class="info">
-          <div class="name">your_handle</div>
-          <div class="handle">Your Name</div>
-        </div>
-        <button class="switch">Switch</button>
-      </div>
-
-      <div class="suggestions-header">
-        <span>Suggested for you</span>
-        <span>See All</span>
-      </div>
-
-      <div id="suggestions"></div>
-
-      <div class="sidebar-footer">
-        <a href="#">About</a> · <a href="#">Help</a> · <a href="#">Press</a> · <a href="#">API</a> ·
-        <a href="#">Jobs</a> · <a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Locations</a> ·
-        <a href="#">Language</a>
-        <div class="copyright">© 2025 INSTACLONE FROM META</div>
-      </div>
-    </aside>
-  </main>
-
-  <!-- MOBILE BOTTOM NAV -->
-  <nav class="mobile-nav">
-    <a href="#"><i class="fas fa-home"></i></a>
-    <a href="#"><i class="fas fa-search"></i></a>
-    <a href="#"><i class="far fa-plus-square"></i></a>
-    <a href="#"><i class="far fa-heart"></i></a>
-    <a href="#"><img class="avatar-nav" src="https://i.pravatar.cc/150?img=12" alt=""></a>
-  </nav>
+  </div>
 
   <script>
-    // ---------- SAMPLE DATA ----------
-    const stories = [
-      { name: 'Your story', img: 'https://i.pravatar.cc/150?img=12', seen: true, isYou: true },
-      { name: 'sarah_j', img: 'https://i.pravatar.cc/150?img=45', seen: false },
-      { name: 'mike.photo', img: 'https://i.pravatar.cc/150?img=33', seen: false },
-      { name: 'travel.kate', img: 'https://i.pravatar.cc/150?img=47', seen: true },
-      { name: 'chef_anton', img: 'https://i.pravatar.cc/150?img=15', seen: false },
-      { name: 'design_daily', img: 'https://i.pravatar.cc/150?img=22', seen: true },
-      { name: 'nature_lens', img: 'https://i.pravatar.cc/150?img=68', seen: false },
-      { name: 'urban.vibes', img: 'https://i.pravatar.cc/150?img=52', seen: true }
+    // ---------- SETUP ----------
+    const canvas = document.getElementById('game');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width;
+    const H = canvas.height;
+
+    const scoreEl = document.getElementById('score');
+    const levelEl = document.getElementById('level');
+    const livesEl = document.getElementById('lives');
+    const overlay = document.getElementById('overlay');
+    const overlayTitle = document.getElementById('overlayTitle');
+    const overlayText = document.getElementById('overlayText');
+    const playBtn = document.getElementById('playBtn');
+
+    // ---------- GAME STATE ----------
+    let state = 'menu'; // menu | playing | paused | gameover | win
+    let score = 0;
+    let lives = 3;
+    let level = 1;
+
+    // Paddle
+    const paddle = {
+      w: 110,
+      h: 14,
+      x: W / 2 - 55,
+      y: H - 40,
+      speed: 8,
+      dx: 0,
+      targetX: W / 2 - 55
+    };
+
+    // Ball
+    const ball = {
+      x: W / 2,
+      y: H - 60,
+      r: 8,
+      speed: 5,
+      dx: 0,
+      dy: 0,
+      trail: []
+    };
+
+    // Bricks
+    let bricks = [];
+    const brickConfig = {
+      rows: 5,
+      cols: 9,
+      w: 0,
+      h: 24,
+      padding: 6,
+      offsetTop: 60,
+      offsetLeft: 0
+    };
+
+    const brickColors = [
+      ['#ff5e9c', '#ff7eb0'],
+      ['#b05eff', '#c48aff'],
+      ['#5e7cff', '#7e98ff'],
+      ['#5effc4', '#7effd4'],
+      ['#ffb35e', '#ffc87e']
     ];
 
-    const posts = [
-      {
-        id: 1,
-        user: 'travel.kate',
-        avatar: 'https://i.pravatar.cc/150?img=47',
-        location: 'Santorini, Greece',
-        image: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=800&q=80',
-        likes: 1284,
-        liked: false,
-        saved: false,
-        caption: 'Golden hour never gets old here 🌅',
-        hashtags: ['#santorini', '#travel', '#sunset'],
-        time: '2 HOURS AGO',
-        comments: 42
-      },
-      {
-        id: 2,
-        user: 'chef_anton',
-        avatar: 'https://i.pravatar.cc/150?img=15',
-        location: 'Brooklyn, NY',
-        image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80',
-        likes: 892,
-        liked: true,
-        saved: false,
-        caption: 'New menu drop this weekend. Truffle risotto anyone? 🍄',
-        hashtags: ['#foodie', '#cheflife', '#brooklyn'],
-        time: '4 HOURS AGO',
-        comments: 18
-      },
-      {
-        id: 3,
-        user: 'nature_lens',
-        avatar: 'https://i.pravatar.cc/150?img=68',
-        location: 'Banff, Canada',
-        image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
-        likes: 3421,
-        liked: false,
-        saved: true,
-        caption: 'Woke up to this view. Worth every mile of the hike.',
-        hashtags: ['#banff', '#mountains', '#wanderlust'],
-        time: '6 HOURS AGO',
-        comments: 87
-      },
-      {
-        id: 4,
-        user: 'urban.vibes',
-        avatar: 'https://i.pravatar.cc/150?img=52',
-        location: 'Tokyo, Japan',
-        image: 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=800&q=80',
-        likes: 2103,
-        liked: false,
-        saved: false,
-        caption: 'Neon nights and endless alleys ✨',
-        hashtags: ['#tokyo', '#streetphotography', '#neon'],
-        time: '8 HOURS AGO',
-        comments: 56
+    // Keyboard
+    const keys = { left: false, right: false };
+
+    // ---------- INIT BRICKS ----------
+    function initBricks() {
+      bricks = [];
+      const totalPadding = (brickConfig.cols - 1) * brickConfig.padding;
+      brickConfig.w = (W - 40 - totalPadding) / brickConfig.cols;
+      brickConfig.offsetLeft = 20;
+
+      for (let r = 0; r < brickConfig.rows; r++) {
+        for (let c = 0; c < brickConfig.cols; c++) {
+          bricks.push({
+            x: brickConfig.offsetLeft + c * (brickConfig.w + brickConfig.padding),
+            y: brickConfig.offsetTop + r * (brickConfig.h + brickConfig.padding),
+            w: brickConfig.w,
+            h: brickConfig.h,
+            row: r,
+            alive: true,
+            points: (brickConfig.rows - r) * 10
+          });
+        }
       }
-    ];
-
-    const suggestions = [
-      { name: 'design_daily', reason: 'Followed by sarah_j', img: 'https://i.pravatar.cc/150?img=22' },
-      { name: 'mike.photo', reason: 'Suggested for you', img: 'https://i.pravatar.cc/150?img=33' },
-      { name: 'travel.kate', reason: 'Followed by chef_anton', img: 'https://i.pravatar.cc/150?img=47' },
-      { name: 'urban.vibes', reason: 'Suggested for you', img: 'https://i.pravatar.cc/150?img=52' },
-      { name: 'sarah_j', reason: 'Followed by nature_lens', img: 'https://i.pravatar.cc/150?img=45' }
-    ];
-
-    // ---------- RENDER STORIES ----------
-    const storiesEl = document.getElementById('stories');
-    storiesEl.innerHTML = stories.map(s => `
-      <div class="story">
-        <div class="story-ring ${s.seen ? 'seen' : ''}">
-          <img src="${s.img}" alt="${s.name}">
-        </div>
-        <div class="story-name">${s.name}</div>
-      </div>
-    `).join('');
-
-    // ---------- RENDER POSTS ----------
-    function formatLikes(n) {
-      return n.toLocaleString('en-US');
     }
 
-    const feedEl = document.getElementById('feed');
-    feedEl.innerHTML = posts.map(p => `
-      <article class="post" data-id="${p.id}">
-        <div class="post-header">
-          <img src="${p.avatar}" alt="${p.user}">
-          <div class="username">${p.user}<span>· ${p.location}</span></div>
-          <button class="more-btn"><i class="fas fa-ellipsis-h"></i></button>
-        </div>
+    // ---------- RESET BALL ----------
+    function resetBall() {
+      ball.x = W / 2;
+      ball.y = paddle.y - ball.r - 2;
+      ball.dx = 0;
+      ball.dy = 0;
+      ball.trail = [];
+      paddle.x = W / 2 - paddle.w / 2;
+      paddle.targetX = paddle.x;
+    }
 
-        <div class="post-image-wrap" data-post="${p.id}">
-          <img class="post-image" src="${p.image}" alt="Post by ${p.user}">
-          <i class="fas fa-heart heart-burst"></i>
-        </div>
+    // ---------- LAUNCH BALL ----------
+    function launchBall() {
+      if (ball.dx !== 0 || ball.dy !== 0) return;
+      const angle = (Math.random() * 0.6 - 0.3) + (-Math.PI / 2);
+      ball.dx = Math.cos(angle) * ball.speed;
+      ball.dy = Math.sin(angle) * ball.speed;
+    }
 
-        <div class="post-actions">
-          <button class="like-btn ${p.liked ? 'liked' : ''}" data-post="${p.id}">
-            <i class="${p.liked ? 'fas' : 'far'} fa-heart"></i>
-          </button>
-          <button class="comment-btn" data-post="${p.id}">
-            <i class="far fa-comment"></i>
-          </button>
-          <button class="share-btn">
-            <i class="far fa-paper-plane"></i>
-          </button>
-          <button class="bookmark-btn ${p.saved ? 'saved' : ''}" data-post="${p.id}">
-            <i class="${p.saved ? 'fas' : 'far'} fa-bookmark"></i>
-          </button>
-        </div>
+    // ---------- START GAME ----------
+    function startGame() {
+      score = 0;
+      lives = 3;
+      level = 1;
+      ball.speed = 5;
+      updateHUD();
+      initBricks();
+      resetBall();
+      state = 'playing';
+      overlay.classList.add('hidden');
+    }
 
-        <div class="post-likes" id="likes-${p.id}">${formatLikes(p.likes)} likes</div>
+    // ---------- NEXT LEVEL ----------
+    function nextLevel() {
+      level++;
+      ball.speed = Math.min(ball.speed + 0.7, 11);
+      updateHUD();
+      initBricks();
+      resetBall();
+      state = 'playing';
+      overlay.classList.add('hidden');
+    }
 
-        <div class="post-caption">
-          <span class="username">${p.user}</span>
-          ${p.caption}
-          ${p.hashtags.map(h => `<a href="#" class="hashtag">${h}</a>`).join(' ')}
-        </div>
+    // ---------- UPDATE HUD ----------
+    function updateHUD() {
+      scoreEl.textContent = score;
+      levelEl.textContent = level;
+      livesEl.innerHTML = '';
+      for (let i = 0; i < 3; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'life' + (i >= lives ? ' lost' : '');
+        livesEl.appendChild(dot);
+      }
+    }
 
-        <div class="post-comments">View all ${p.comments} comments</div>
-        <div class="post-time">${p.time}</div>
+    // ---------- SHOW OVERLAY ----------
+    function showOverlay(title, text, btnLabel) {
+      overlayTitle.textContent = title;
+      overlayText.textContent = text;
+      playBtn.textContent = btnLabel;
+      overlay.classList.remove('hidden');
+    }
 
-        <div class="add-comment">
-          <input type="text" placeholder="Add a comment..." data-input="${p.id}">
-          <button data-post="${p.id}">Post</button>
-        </div>
-      </article>
-    `).join('');
+    // ---------- COLLISION: CIRCLE vs RECT ----------
+    function circleRectCollision(cx, cy, cr, rx, ry, rw, rh) {
+      const closestX = Math.max(rx, Math.min(cx, rx + rw));
+      const closestY = Math.max(ry, Math.min(cy, ry + rh));
+      const dx = cx - closestX;
+      const dy = cy - closestY;
+      return (dx * dx + dy * dy) < cr * cr;
+    }
 
-    // ---------- RENDER SUGGESTIONS ----------
-    document.getElementById('suggestions').innerHTML = suggestions.map(s => `
-      <div class="suggestion">
-        <img src="${s.img}" alt="${s.name}">
-        <div class="info">
-          <div class="name">${s.name}</div>
-          <div class="reason">${s.reason}</div>
-        </div>
-        <button class="follow-btn">Follow</button>
-      </div>
-    `).join('');
+    // ---------- UPDATE ----------
+    function update() {
+      if (state !== 'playing') return;
 
-    // ---------- LIKE BUTTONS ----------
-    document.querySelectorAll('.like-btn').forEach(btn => {
-      btn.addEventListener('click', function () {
-        const postId = this.dataset.post;
-        const post = posts.find(p => p.id == postId);
-        const icon = this.querySelector('i');
-        const likesEl = document.getElementById('likes-' + postId);
+      // Paddle movement (keyboard)
+      if (keys.left) paddle.targetX -= paddle.speed;
+      if (keys.right) paddle.targetX += paddle.speed;
+      paddle.targetX = Math.max(0, Math.min(W - paddle.w, paddle.targetX));
 
-        if (post.liked) {
-          post.liked = false;
-          post.likes -= 1;
-          this.classList.remove('liked');
-          icon.className = 'far fa-heart';
+      // Smooth paddle
+      paddle.x += (paddle.targetX - paddle.x) * 0.25;
+
+      // Ball follows paddle before launch
+      if (ball.dx === 0 && ball.dy === 0) {
+        ball.x = paddle.x + paddle.w / 2;
+        ball.y = paddle.y - ball.r - 2;
+        return;
+      }
+
+      // Move ball
+      ball.x += ball.dx;
+      ball.y += ball.dy;
+
+      // Trail
+      ball.trail.push({ x: ball.x, y: ball.y });
+      if (ball.trail.length > 10) ball.trail.shift();
+
+      // Wall collisions
+      if (ball.x - ball.r < 0) {
+        ball.x = ball.r;
+        ball.dx = Math.abs(ball.dx);
+      }
+      if (ball.x + ball.r > W) {
+        ball.x = W - ball.r;
+        ball.dx = -Math.abs(ball.dx);
+      }
+      if (ball.y - ball.r < 0) {
+        ball.y = ball.r;
+        ball.dy = Math.abs(ball.dy);
+      }
+
+      // Bottom — lose life
+      if (ball.y - ball.r > H) {
+        lives--;
+        updateHUD();
+        if (lives <= 0) {
+          state = 'gameover';
+          showOverlay('Game Over', `You scored ${score} points. Try again!`, 'Play Again');
         } else {
-          post.liked = true;
-          post.likes += 1;
-          this.classList.add('liked');
-          icon.className = 'fas fa-heart';
+          resetBall();
         }
-        likesEl.textContent = formatLikes(post.likes) + ' likes';
-      });
-    });
+        return;
+      }
 
-    // ---------- BOOKMARK BUTTONS ----------
-    document.querySelectorAll('.bookmark-btn').forEach(btn => {
-      btn.addEventListener('click', function () {
-        const postId = this.dataset.post;
-        const post = posts.find(p => p.id == postId);
-        const icon = this.querySelector('i');
+      // Paddle collision
+      if (ball.dy > 0 &&
+          circleRectCollision(ball.x, ball.y, ball.r, paddle.x, paddle.y, paddle.w, paddle.h)) {
 
-        post.saved = !post.saved;
-        if (post.saved) {
-          this.classList.add('saved');
-          icon.className = 'fas fa-bookmark';
-        } else {
-          this.classList.remove('saved');
-          icon.className = 'far fa-bookmark';
-        }
-      });
-    });
+        // Determine bounce angle based on hit position
+        const hitPos = (ball.x - (paddle.x + paddle.w / 2)) / (paddle.w / 2);
+        const angle = hitPos * (Math.PI / 3); // max 60 degrees
+        const speed = Math.hypot(ball.dx, ball.dy);
 
-    // ---------- DOUBLE TAP TO LIKE ----------
-    document.querySelectorAll('.post-image-wrap').forEach(wrap => {
-      let lastTap = 0;
-      const postId = wrap.dataset.post;
+        ball.dx = speed * Math.sin(angle);
+        ball.dy = -speed * Math.cos(angle);
+        ball.y = paddle.y - ball.r - 1;
+      }
 
-      wrap.addEventListener('click', function () {
-        const now = Date.now();
-        if (now - lastTap < 300) {
-          // Double tap detected
-          const post = posts.find(p => p.id == postId);
-          if (!post.liked) {
-            const likeBtn = document.querySelector(`.like-btn[data-post="${postId}"]`);
-            likeBtn.click();
+      // Brick collisions
+      let aliveCount = 0;
+      for (const b of bricks) {
+        if (!b.alive) continue;
+        aliveCount++;
+
+        if (circleRectCollision(ball.x, ball.y, ball.r, b.x, b.y, b.w, b.h)) {
+          b.alive = false;
+          score += b.points;
+          updateHUD();
+
+          // Determine bounce direction
+          const ballCenterX = ball.x;
+          const ballCenterY = ball.y;
+          const brickCenterX = b.x + b.w / 2;
+          const brickCenterY = b.y + b.h / 2;
+
+          const dx = ballCenterX - brickCenterX;
+          const dy = ballCenterY - brickCenterY;
+
+          const overlapX = (b.w / 2 + ball.r) - Math.abs(dx);
+          const overlapY = (b.h / 2 + ball.r) - Math.abs(dy);
+
+          if (overlapX < overlapY) {
+            ball.dx = -ball.dx;
+            ball.x += dx > 0 ? overlapX : -overlapX;
+          } else {
+            ball.dy = -ball.dy;
+            ball.y += dy > 0 ? overlapY : -overlapY;
           }
-          // Heart animation
-          const heart = wrap.querySelector('.heart-burst');
-          heart.classList.remove('animate');
-          void heart.offsetWidth; // reflow
-          heart.classList.add('animate');
+          break; // one brick per frame
         }
-        lastTap = now;
-      });
-    });
+      }
 
-    // ---------- COMMENT INPUT ----------
-    document.querySelectorAll('.add-comment input').forEach(input => {
-      const btn = input.nextElementSibling;
-
-      input.addEventListener('input', function () {
-        if (this.value.trim().length > 0) {
-          btn.classList.add('active');
+      // Win check
+      if (aliveCount === 0) {
+        if (level < 3) {
+          nextLevel();
         } else {
-          btn.classList.remove('active');
+          state = 'win';
+          showOverlay('You Win! 🏆', `Amazing! You cleared all levels with ${score} points.`, 'Play Again');
         }
-      });
+      }
+    }
 
-      input.addEventListener('keypress', function (e) {
-        if (e.key === 'Enter' && this.value.trim().length > 0) {
-          btn.click();
-        }
-      });
+    // ---------- DRAW ----------
+    function draw() {
+      // Clear with subtle gradient
+      const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+      bgGrad.addColorStop(0, '#0d1120');
+      bgGrad.addColorStop(1, '#0a0c16');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, W, H);
 
-      btn.addEventListener('click', function () {
-        if (input.value.trim().length > 0) {
-          const postId = this.dataset.post;
-          const post = posts.find(p => p.id == postId);
-          post.comments += 1;
-          const commentsEl = document.querySelector(`.post[data-id="${postId}"] .post-comments`);
-          commentsEl.textContent = `View all ${post.comments} comments`;
-          input.value = '';
-          btn.classList.remove('active');
-        }
-      });
+      // Grid glow
+      ctx.strokeStyle = 'rgba(94, 124, 255, 0.04)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < W; x += 40) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, H);
+        ctx.stroke();
+      }
+      for (let y = 0; y < H; y += 40) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(W, y);
+        ctx.stroke();
+      }
+
+      // Bricks
+      for (const b of bricks) {
+        if (!b.alive) continue;
+        const colors = brickColors[b.row % brickColors.length];
+
+        const grad = ctx.createLinearGradient(b.x, b.y, b.x, b.y + b.h);
+        grad.addColorStop(0, colors[0]);
+        grad.addColorStop(1, colors[1]);
+
+        ctx.fillStyle = grad;
+        ctx.shadowColor = colors[0];
+        ctx.shadowBlur = 12;
+        roundRect(ctx, b.x, b.y, b.w, b.h, 5);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // Highlight
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+        roundRect(ctx, b.x + 2, b.y + 2, b.w - 4, 4, 2);
+        ctx.fill();
+      }
+
+      // Paddle
+      const paddleGrad = ctx.createLinearGradient(paddle.x, paddle.y, paddle.x, paddle.y + paddle.h);
+      paddleGrad.addColorStop(0, '#7e98ff');
+      paddleGrad.addColorStop(1, '#5e7cff');
+      ctx.fillStyle = paddleGrad;
+      ctx.shadowColor = '#5e7cff';
+      ctx.shadowBlur = 20;
+      roundRect(ctx, paddle.x, paddle.y, paddle.w, paddle.h, 7);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // Paddle highlight
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+      roundRect(ctx, paddle.x + 4, paddle.y + 2, paddle.w - 8, 3, 1.5);
+      ctx.fill();
+
+      // Ball trail
+      for (let i = 0; i < ball.trail.length; i++) {
+        const t = ball.trail[i];
+        const alpha = (i / ball.trail.length) * 0.4;
+        const size = ball.r * (i / ball.trail.length);
+        ctx.beginPath();
+        ctx.arc(t.x, t.y, size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 126, 176, ${alpha})`;
+        ctx.fill();
+      }
+
+      // Ball
+      const ballGrad = ctx.createRadialGradient(
+        ball.x - 3, ball.y - 3, 1,
+        ball.x, ball.y, ball.r
+      );
+      ballGrad.addColorStop(0, '#ffffff');
+      ballGrad.addColorStop(1, '#ff7eb0');
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+      ctx.fillStyle = ballGrad;
+      ctx.shadowColor = '#ff5e9c';
+      ctx.shadowBlur = 20;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // "Click to launch" hint
+      if (state === 'playing' && ball.dx === 0 && ball.dy === 0) {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+        ctx.font = '600 14px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Click or press Space to launch', W / 2, H / 2 + 60);
+      }
+    }
+
+    function roundRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+
+    // ---------- GAME LOOP ----------
+    function loop() {
+      update();
+      draw();
+      requestAnimationFrame(loop);
+    }
+
+    // ---------- INPUT: MOUSE / TOUCH ----------
+    function handlePointerMove(clientX) {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = W / rect.width;
+      const x = (clientX - rect.left) * scaleX;
+      paddle.targetX = x - paddle.w / 2;
+      paddle.targetX = Math.max(0, Math.min(W - paddle.w, paddle.targetX));
+    }
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (state === 'playing') handlePointerMove(e.clientX);
     });
 
-    // ---------- FOLLOW BUTTONS ----------
-    document.querySelectorAll('.follow-btn').forEach(btn => {
-      btn.addEventListener('click', function () {
-        if (this.textContent === 'Follow') {
-          this.textContent = 'Following';
-          this.style.color = '#8e8e8e';
-        } else {
-          this.textContent = 'Follow';
-          this.style.color = '#0095f6';
-        }
-      });
+    canvas.addEventListener('touchmove', (e) => {
+      if (state === 'playing') {
+        e.preventDefault();
+        handlePointerMove(e.touches[0].clientX);
+      }
+    }, { passive: false });
+
+    canvas.addEventListener('click', () => {
+      if (state === 'playing') launchBall();
     });
+
+    canvas.addEventListener('touchstart', (e) => {
+      if (state === 'playing') {
+        e.preventDefault();
+        launchBall();
+      }
+    }, { passive: false });
+
+    // ---------- INPUT: KEYBOARD ----------
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = true;
+      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = true;
+      if (e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault();
+        if (state === 'playing') launchBall();
+      }
+    });
+
+    document.addEventListener('keyup', (e) => {
+      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = false;
+      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = false;
+    });
+
+    // ---------- PLAY BUTTON ----------
+    playBtn.addEventListener('click', () => {
+      if (state === 'gameover' || state === 'win' || state === 'menu') {
+        startGame();
+      } else {
+        state = 'playing';
+        overlay.classList.add('hidden');
+      }
+    });
+
+    // ---------- INIT ----------
+    initBricks();
+    resetBall();
+    updateHUD();
+    showOverlay('Brick Breaker', 'Move your paddle with the mouse or arrow keys. Break all the bricks to win!', 'Play Game');
+    loop();
   </script>
 </body>
 </html>
