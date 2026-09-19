@@ -2,4 +2,4 @@ FROM nginx
 EXPOSE 80
 LABEL this is my first docker file to create an basic nginx app
 MAINTAINER srinivas
-ADD html /usr/share/nginx/html
+COPY html /usr/share/nginx/html/
